@@ -17,7 +17,7 @@ node{
     }
     
     stage('Push Docker Image'){
-        withCredentials([string(credentialsId: 'Docker_Hub_Pwd', variable: 'Docker_Hub_Pwd')]) {
+        withCredentials([string(credentialsId: 'docker_hub_password', variable: 'dockerpassword')]) {
           sh "docker login -u dockerhandson -p ${Docker_Hub_Pwd}"
         }
         sh 'docker push dockerhandson/java-web-app'
@@ -28,10 +28,10 @@ node{
         def dockerRun = ' docker run  -d -p 8080:8080 --name java-web-app dockerhandson/java-web-app'
          
          sshagent(['DOCKER_SERVER']) {
-          sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.20.72 docker stop java-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rm java-web-app || true'
-          sh 'ssh  ubuntu@172.31.20.72 docker rmi -f  $(docker images -q) || true'
-          sh "ssh  ubuntu@172.31.20.72 ${dockerRun}"
+          sh 'ssh -o StrictHostKeyChecking=no ubuntu@15.206.81.146 docker stop java-web-app || true'
+          sh 'ssh  ubuntu@15.206.81.146 docker rm java-web-app || true'
+          sh 'ssh  ubuntu@15.206.81.146 docker rmi -f  $(docker images -q) || true'
+          sh "ssh  ubuntu@15.206.81.146 ${dockerRun}"
        }
        
     }
